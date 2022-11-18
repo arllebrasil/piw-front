@@ -22,7 +22,7 @@ export const Post = ({ post }: { post: Postagem }) => {
         </div>
         <div className="w-full h-[1px] my-4 opacity-20 bg-blue-600"></div>
         <div className="flex">
-          <label className="w-6 h-6 relative flex items-cente justify-center">
+          <label className="w-6 h-6 flex items-cente justify-center">
             <input
               type="checkbox"
               className="peer absolute top-1/4 opacity-0"
@@ -34,7 +34,7 @@ export const Post = ({ post }: { post: Postagem }) => {
           <span className="text-blue-400 text-sm">
             {`${likes}`}{' '}
             <span className="text-stone-600">
-              pessoas curtiram esta postagem{' '}
+              curtidas
             </span>
           </span>
         </div>

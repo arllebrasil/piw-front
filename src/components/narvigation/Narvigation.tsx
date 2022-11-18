@@ -14,13 +14,13 @@ export const Narvigation: React.FC<NarvigationProps> = () => {
         <nav className="relative">
           <div className="h-full hidden sm:flex items-stretch">
             <NavLink className="px-4 text-white hover:text-sky-400" end to="/">
-              <span>Time Line</span>
+              <a>Time Line</a>
             </NavLink>
             <NavLink
               className="h-max block px-4  text-white hover:text-sky-400"
               to="/poste-regiter"
             >
-              <span>New Post</span>
+              <a>New Post</a>
             </NavLink>
           </div>
           <div className="flex items-center sm:hidden">
@@ -30,13 +30,13 @@ export const Narvigation: React.FC<NarvigationProps> = () => {
             />
             <div className="absolute rounded-sm shadow-md top-full -right-4 mt-6 transition-opacity opacity-0 peer-checked:opacity-100 duration-500 hidden peer-checked:flex flex-col py-4 bg-white">
               <NavLink className="px-4 py-2 whitespace-nowrap" end to="/">
-                <span>Time Line</span>
+                <a>Time Line</a>
               </NavLink>
               <NavLink
                 className="px-4 py-2 whitespace-nowrap"
                 to="/poste-regiter"
               >
-                <span>New Post</span>
+                <a>New Post</a>
               </NavLink>
             </div>
           </div>
