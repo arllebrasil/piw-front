@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { HomeLayout } from '../components/layout/HomeLayout';
+import { AuthContext, AuthContextState } from '../context/auth/AuthContext';
 
 interface FormData{
   email:string;
@@ -9,10 +11,17 @@ interface FormData{
 
 export const SignIn: React.FC<{}> = ({}) => {
 
+  const {handleSignIn} = useContext(AuthContext) as AuthContextState;
   const {register, handleSubmit, formState:{errors}} = useForm<FormData>();
+  const navigate = useNavigate();
 
-  function handleSignIn(data:FormData){
-
+  async function handleSubmitSignIn({email, senha}:FormData){
+    try {
+      await handleSignIn({email, senha});
+      navigate("/feed");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -20,7 +29,7 @@ export const SignIn: React.FC<{}> = ({}) => {
         <div className="flex justify-center items-center bg-blue-50 flex-1">
         <div className="w-full max-w-[420px] flex flex-col items-center px-4 py-8 rounded-sm bg-blue-900/80 text-white">
         <h2 className='text-2xl'>Faça seu login</h2>
-            <form onSubmit={handleSubmit(handleSignIn)}>
+            <form onSubmit={handleSubmit(handleSubmitSignIn)}>
               <div className=" flex flex-col justify-center items-center gap-4">
                 <fieldset name="credenciais">
                   <div className="flex flex-col justify-center items-center gap-1">
