@@ -1,6 +1,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import api from '../../utils/api';
+import { Postagem } from '../timeline/Post';
 
 interface FormData {
   texto: string;
@@ -8,9 +10,14 @@ interface FormData {
 export const PostForm: React.FC<any> = () => {
   const { register, handleSubmit } = useForm<FormData>();
   const narvigate = useNavigate();
-  function submitPost(data: FormData) {
-    console.log(data);
-    narvigate('/');
+  async function submitPost(data: FormData) {
+    try{
+      await api.post<Postagem>("/posts",data);
+      console.log(data);
+      narvigate('/feed');
+    }catch(error){
+      console.log(error);
+    }
   }
 
   return (

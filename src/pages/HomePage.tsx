@@ -10,12 +10,12 @@ export const HomePage: React.FC<{}> = ({}) => {
           <div className="text-center">
             <h2 className="text-4xl font-semibold text-slate-600">Entre no seu perfil agora mesmo</h2>
             <div className="flex justify-center items-center gap-4 mt-8">
-              <Link to="/">
-                <a className="px-8 py-4 text-blue-800 bg-white text-xl font-bold rounded-md shadow-xl">Entrar</a>
+              <Link to="/login">
+                <span className="px-8 py-4 text-blue-800 bg-white text-xl font-bold rounded-md shadow-xl">Entrar</span>
               </Link>
               <span> OU </span>
-              <Link to="/">
-              <a className="px-8 py-4 bg-blue-800 text-white text-xl font-bold rounded-md shadow-xl">Entrar</a>
+              <Link to="/cadastro">
+              <span className="px-8 py-4 bg-blue-800 text-white text-xl font-bold rounded-md shadow-xl">Cadastre-se</span>
               </Link>
             </div>
           </div>

@@ -1,20 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Usuario } from '../../context/auth/AuthContext';
+import api from '../../utils/api';
+import { Comentario } from './Comentario';
 import { ComentarioForm } from './comentario-form';
 
-export type Postagem = {
-  id: Number;
-  userName: string;
-  texto: string;
-  likes: Number;
+export interface Postagem {
+  id:number;
+  texto:string;
+  id_usuario:number;
+  likes:number;
+};
+
+export interface ComentarioData {
+  id:number;
+  texto:string;
+  id_usuario:number;
+  id_post:number;
 };
 
 export const Post = ({ post }: { post: Postagem }) => {
-  const { id, userName, texto, likes } = post;
+  const { id, id_usuario, texto, likes } = post;
+  const [usuario,setUsuario] = useState<Usuario|null>(null);
+  const [comentarios, setComentarios] = useState<ComentarioData[]>([]);
+
+  useEffect(() => {
+    api.get<{nome:string}>(`/usuarios/${id_usuario}`)
+    .then((response) => setUsuario(response.data))
+    .catch((console.log));
+  }, []);
+
+  useEffect(() => {
+    api.get<ComentarioData[]>(`/comentarios/${post.id}`)
+    .then( (response) => setComentarios(response.data))
+    .catch(console.log);
+  })
+
   return (
     <div className="relative flex overflow-clip flex-col items-stretch bg-blue-100/75 rounded-md shadow-sm shadow-blue-400/75">
       <div className="px-2 py-4">
         <div className="flex justify-between items-center">
-          <span className="text-blue-400">@{userName}</span>
+          <span className="text-blue-400">@{usuario?.nome}</span>
           <span className="text-stone-500 text-sm">{`#${id}`}</span>
         </div>
         <div className="px-1 text-2xl">
@@ -40,13 +65,16 @@ export const Post = ({ post }: { post: Postagem }) => {
         </div>
         <div>
           <h2 className="text-sm">Comentarios</h2>
-          <p className="text-sm text-stone-700">
-            <span>@usuario </span> Em pleno 2022, ano da copa do mundo. Você
-            conhece Elom Musck?
-          </p>
+          <div>
+            {
+              comentarios.map((comentario) => (
+                <Comentario key={`${comentario.id}`} {...comentario} />
+              ))
+            }
+          </div>
         </div>
       </div>
-      <ComentarioForm />
+      <ComentarioForm id_post={id} />
     </div>
   );
 };

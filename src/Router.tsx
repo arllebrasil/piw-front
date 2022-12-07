@@ -9,7 +9,7 @@ import { AuthContext, AuthContextState } from './context/auth/AuthContext';
 
 function Router() {
 
-  const {usuario} = useContext(AuthContext) as AuthContextState;
+  const {token} = useContext(AuthContext) as AuthContextState;
 
   return (
       <BrowserRouter>
@@ -17,19 +17,19 @@ function Router() {
               <Route path="/" element={<HomePage />} />
               <Route 
                 path="/login" 
-                element={ (!usuario) ? <SignIn /> : <Navigate to="/feed" />}
+                element={(!token) ? <SignIn /> : <Navigate to="/feed" />}
                />
               <Route 
                 path="/cadastro" 
-                element={(!usuario) ? <Subscribe /> : <Navigate to="/" />}
+                element={(!token) ? <Subscribe /> : <Navigate to="/" />}
                />
               <Route 
                 path="/feed" 
-                element={(usuario) ? <FeedPage /> : <Navigate to="/" />} 
+                element={(token) ? <FeedPage /> : <Navigate to="/" />} 
               />
               <Route 
                 path="/poste-regiter" 
-                element={(usuario) ? <PostRegister /> : <Navigate to="/" />} 
+                element={(token) ? <PostRegister /> : <Navigate to="/" />} 
               />
             </Routes>
       </BrowserRouter>

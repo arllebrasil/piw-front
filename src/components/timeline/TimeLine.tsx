@@ -1,32 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import api from '../../utils/api';
 import { Post, Postagem } from './Post';
 
 type TimeLineProps = {
   postagens?: Postagem[];
 };
 
+export interface Post{
+  id:number;
+  texto:string;
+  id_usuario:number;
+  likes:number;
+}
+
 export const TimeLine: React.FC = ({ postagens }: TimeLineProps) => {
-  const pst = [];
-  const posts = postagens ?? [
-    {
-      id: 10,
-      userName: 'arlle br',
-      texto: 'Eleições no proximo fim de semana',
-      likes: 20,
-    },
-    {
-      id: 11,
-      userName: 'arlle br',
-      texto: 'Eleições no proximo fim de semana',
-      likes: 20,
-    },
-    {
-      id: 12,
-      userName: 'arlle br',
-      texto: 'Eleições no proximo fim de semana',
-      likes: 20,
-    },
-  ];
+
+  const [posts,setPosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    api.get<Post[]>("/posts")
+    .then((response) => setPosts(response.data))
+    .catch(console.log);
+  });
 
   return (
     <div className="w-full grid items-center co">

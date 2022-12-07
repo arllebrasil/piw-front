@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Logo } from '../logo/Logo';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { AuthContext, AuthContextState } from '../../context/auth/AuthContext';
 
 type NarvigationProps = {};
 
 export const FeedNarvigation: React.FC<NarvigationProps> = () => {
+
+  const {usuario,signOut} = useContext(AuthContext) as AuthContextState;
+  const navigate = useNavigate();
+
+  async function handleSignOut(){
+    await signOut();
+    navigate("/");
+  }
+
   return (
     <header className="w-full h-12 px-6 flex justify-between items-stretch bg-blue-700">
       <div className="flex items-center">
@@ -24,7 +34,8 @@ export const FeedNarvigation: React.FC<NarvigationProps> = () => {
           </div>
           <div className="flex items-center sm:hidden">
             <input
-              type="checkbox"
+              type="radio"
+              name="menu"
               className="peer sm:hidden absolute before:content-[':'] "
             />
             <div className="absolute z-10 rounded-sm shadow-md top-full -right-4 mt-6 hidden peer-checked:flex peer-checked:flex-col py-4 bg-white">
@@ -41,8 +52,20 @@ export const FeedNarvigation: React.FC<NarvigationProps> = () => {
           </div>
         </nav>
         <div className="flex items-center gap-2">
-          <span className="block w-8 h-8 bg-blue-50 rounded-full border-2 border-blue-300"></span>
-          <h3 className="hidden sm:block font-semibold text-sm">@User Name</h3>
+          <div className="relative items-center block w-8 h-8 bg-blue-50 rounded-full border-2 border-blue-300">
+            <span className=""></span>
+            <input 
+              type="radio"
+              name="menu"
+              className="peer w-full h-full opacity-0" />
+            <div className="absolute z-10 top-full right-full mt-2 ml-2 min-w-[120px] invisible peer-checked:visible flex flex-col items-stretch py-4 transition-opacity opacity-0 duration-300 peer-checked:opacity-100  bg-white shadow-md">
+              <button 
+                className="h-12 px-4 py-2 text-xl font-medium"
+                onClick={handleSignOut}
+               >Sair</button>
+            </div>
+          </div>
+          <h3 className="hidden sm:block font-semibold text-sm text-white">@{usuario?.nome}</h3>
         </div>
       </div>
     </header>

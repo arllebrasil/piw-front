@@ -2,7 +2,7 @@ import axios from "axios"
 import { Usuario } from "../context/auth/AuthContext";
 
 const api = axios.create({
-    baseURL:"http://localhost:3000"
+    baseURL:"http://localhost:3000/api"
 });
 
 api.interceptors.request.use((config) => {
@@ -12,9 +12,5 @@ api.interceptors.request.use((config) => {
     }
     return config;
 });
-
-export async function signin(data:Usuario){
-
-}
 
 export default api;

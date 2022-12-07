@@ -9,9 +9,11 @@ export interface Usuario{
 }
 
 export interface AuthContextState{
-    handleSignIn:(usuario:Usuario) => Promise<void>;
-    handleSignUp:(usuario:Usuario) => Promise<Usuario | undefined>;
+    signIn:(usuario:Usuario) => Promise<void>;
+    signUp:(usuario:Usuario) => Promise<Usuario | undefined>;
+    signOut:() => Promise<void>;
     usuario: Usuario | null;
+    token:string | null;
 }
 
 interface AuthProviderProps{
@@ -23,42 +25,33 @@ export const AuthContext = createContext<AuthContextState|null>(null);
 
 export const AuthProvider = ({children}:AuthProviderProps) => {
 
-    const [usuario, setUsuario] = useState<Usuario|null>(null);
+    const [usuario, setUsuario] = useState<Usuario|null>(() => {
+        let storedUserJson = localStorage.getItem("usuario") ?? null;
+        return storedUserJson ? JSON.parse(storedUserJson) : null;
+    });
 
-    useEffect(() => {
-        let storedToken = localStorage.getItem("token");
-        if(!storedToken) return;
+    const [token, setToken] = useState<string|null>(() => {
+        let storedTokenJson = localStorage.getItem("token");
+        return storedTokenJson ?? null;
+    });
 
-        let storedUser:Usuario|null =  null;
-        let storedUserJson = localStorage.getItem("usuario");
-        if(!storedUserJson) return;
-
-        storedUser = JSON.parse(storedUserJson) as Usuario ?? null;
-        setUsuario(storedUser);
-
-        return function(){
-            if(usuario){
-                localStorage.setItem("usuario", JSON.stringify(usuario));
-            }
-        }
-    }, []);
-
-    async function handleSignIn({email, senha}:Usuario){
-        localStorage.setItem("token","abc123");
+    async function signIn({email, senha}:Usuario){
         try {
             const {token, usuario, error} = await (await api.post<{usuario?:Usuario, token?:string, error?:string}>("/usuarios/signin",{email, senha})).data;
+            if(token){
+                setToken(token);
+                localStorage.setItem("token", token);
+            }
             if(usuario) {
                 setUsuario(usuario);
-                // localStorage.setItem("usuario", JSON.stringify(usuario));
+                localStorage.setItem("usuario", JSON.stringify(usuario));
             };
-            if(token) localStorage.setItem("token", token);
         } catch (error) {
             throw error;
         }
     }
 
-    async function handleSignUp({email, nome, senha}:Usuario){
-        localStorage.setItem("token","abc123");
+    async function signUp({email, nome, senha}:Usuario){
         try {
             const usuario = await (await api.post<Usuario>("/usuarios/cadastro",{email, senha, nome})).data;
             if(usuario){
@@ -69,15 +62,15 @@ export const AuthProvider = ({children}:AuthProviderProps) => {
         }
     }
 
-    async function handleSignOut(){
+    async function signOut(){
         localStorage.removeItem("token");
         localStorage.removeItem("usuario");
+        setToken(null);
         setUsuario(null);
+        console.log("Sair");
     }
 
-
-
-    return <AuthContext.Provider value={{usuario, handleSignIn, handleSignUp}}>
+    return <AuthContext.Provider value={{usuario, signIn, signUp,signOut, token}}>
         {children}
     </AuthContext.Provider>
 }

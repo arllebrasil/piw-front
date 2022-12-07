@@ -11,13 +11,13 @@ interface FormData{
 
 export const SignIn: React.FC<{}> = ({}) => {
 
-  const {handleSignIn} = useContext(AuthContext) as AuthContextState;
+  const {signIn} = useContext(AuthContext) as AuthContextState;
   const {register, handleSubmit, formState:{errors}} = useForm<FormData>();
   const navigate = useNavigate();
 
   async function handleSubmitSignIn({email, senha}:FormData){
     try {
-      await handleSignIn({email, senha});
+      await signIn({email, senha});
       navigate("/feed");
     } catch (error) {
       console.log(error);
