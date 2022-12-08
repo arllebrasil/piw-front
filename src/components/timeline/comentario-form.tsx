@@ -1,20 +1,24 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import api from '../../utils/api';
+import { ComentarioData } from './Post';
 
 interface ComentarioFormData {
   texto: string;
 }
 
-export const ComentarioForm: React.FC<{id_post:number}> = ({id_post}) => {
+export const ComentarioForm: React.FC<{id_post:number, addComentario?:(comentario:ComentarioData) => void}> = ({id_post,addComentario}) => {
   const { register, handleSubmit } = useForm<ComentarioFormData>();
 
   async function handleComentarioSubmit(data:ComentarioFormData) {
     try {
-      api.post("/comentarios", {
+      const comentario = await ( await api.post<ComentarioData>("/comentarios", {
         ...data,
         id_post
-      })
+      })).data;
+      if(comentario) {
+        addComentario?.(comentario);
+      }
     } catch (error) {
       console.log(error);
     }

@@ -33,7 +33,11 @@ export const Post = ({ post }: { post: Postagem }) => {
     api.get<ComentarioData[]>(`/comentarios/${post.id}`)
     .then( (response) => setComentarios(response.data))
     .catch(console.log);
-  })
+  });
+
+  function addComentario(comentario:ComentarioData){
+    setComentarios([comentario, ...comentarios]);
+  }
 
   return (
     <div className="relative flex overflow-clip flex-col items-stretch bg-blue-100/75 rounded-md shadow-sm shadow-blue-400/75">
@@ -68,7 +72,7 @@ export const Post = ({ post }: { post: Postagem }) => {
           <div>
             {
               comentarios.map((comentario) => (
-                <Comentario key={`${comentario.id}`} {...comentario} />
+                <Comentario key={`${comentario.id}`} {...comentario} {...addComentario} />
               ))
             }
           </div>
